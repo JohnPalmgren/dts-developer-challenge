@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DTS Developer Technical Test
 
-## Getting Started
+## Objective
+To assess your ability to build a simple API and frontend using best coding practices.
 
-First, run the development server:
+## Scenario
+HMCTS requires a new system to be developed so caseworkers can keep track of their tasks. Your technical test is to develop that new system so caseworkers can efficiently manage their tasks.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Task Requirements
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Backend API
+The backend should be able to:
+- Create a task with the following properties:
+    - Title
+    - Description (optional field)
+    - Status
+    - Due date/time
+- Retrieve a task by ID
+- Retrieve all tasks
+- Update the status of a task
+- Delete a task
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Frontend Application
+The frontend should be able to:
+- Create, view, update, and delete tasks
+- Display tasks in a user-friendly interface
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Technical Requirements
+Here are a few starter repositories if you would like to use our tech stack:
+- [Backend Starter Repo](https://github.com/hmcts/hmcts-dev-test-backend)
+- [Frontend Starter Repo](https://github.com/hmcts/hmcts-dev-test-frontend)
 
-## Learn More
+You can use any language you are comfortable with or our own stack:
+- **Backend**: Any language or framework of your choice
+- **Frontend**: Any language or framework of your choice
+- Implement **unit tests**
+- Store data in a **database**
+- Include **validation and error handling**
+- **Document API endpoints**
 
-To learn more about Next.js, take a look at the following resources:
+## Submission Guidelines
+- Create repositories on GitHub and add add the links to your application
+- Include a helpful `README.md`!
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Happy coding!
