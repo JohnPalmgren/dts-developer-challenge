@@ -2,7 +2,7 @@ interface Task {
     id: number;
     title: string;
     description?: string;
-    status: number;
+    completed: boolean;
     dueDate: Date;
 }
 
