@@ -5,11 +5,29 @@
     max-width: 400px;
     min-width: 250px;
     height: 100vh;
-    background-color: #dab9b2;
+    background-color: var(--secondary);
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    height: 100%;
 }
 
 .spacer {
     width: 30%;
     max-width: 400px;
     min-width: 250px;
+}
+
+.addTask {
+    background: none;
+    font: inherit;
+    font-weight: bold;
+    color: var(--accent);
+    border: none;
+    cursor: pointer;
 }
