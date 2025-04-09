@@ -1,0 +1,15 @@
+
+.panel {
+    position: fixed;
+    width: 30%;
+    max-width: 400px;
+    min-width: 250px;
+    height: 100vh;
+    background-color: #dab9b2;
+}
+
+.spacer {
+    width: 30%;
+    max-width: 400px;
+    min-width: 250px;
+}
