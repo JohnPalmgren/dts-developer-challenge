@@ -6,4 +6,16 @@ interface Task {
     dueDate: Date;
 }
 
-export type { Task };
+type TaskInput = Omit<Task, 'id'>;
+
+interface RouteParams {
+    params: Promise<{
+        id: string;
+    }>
+}
+
+export type {
+    Task,
+    TaskInput,
+    RouteParams,
+};
