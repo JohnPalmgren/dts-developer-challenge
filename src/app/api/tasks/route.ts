@@ -1,5 +1,6 @@
-import { Task } from "@/lib/types";
 import { NextRequest, NextResponse } from 'next/server';
+import { Task } from "@/lib/types";
+import { getAllTasks } from "@/app/api/tasks/controller";
 
 const dummyData: Array<Task> = [
     {
@@ -38,7 +39,17 @@ const dummyData: Array<Task> = [
 ]
 
 const GET = async () => {
-    return NextResponse.json(dummyData, {status: 200, statusText: "OK"});
+    try {
+        const tasks = getAllTasks()
+        return NextResponse.json(tasks, {status: 200, statusText: "OK"});
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            return NextResponse.json({error: error.message}, {status: 500, statusText: error.message});
+        } else {
+            return NextResponse.json({error: "Internal Server Error"}, {status: 500, statusText: "Internal Server Error"});
+        }
+    }
 }
 
 const POST = async (request: NextRequest) => {
