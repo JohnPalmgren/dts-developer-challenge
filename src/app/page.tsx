@@ -1,6 +1,6 @@
 import styles from "./page.module.css";
-import { Task } from "@/types";
-import { formatDate } from "@/helper/helper"
+import { Task } from "@/lib/types";
+import { formatDate } from "@/lib/utils"
 import Image from "next/image";
 import binIcon from "../assets/bin.png";
 import pencilIcon from "../assets/pencil.png";

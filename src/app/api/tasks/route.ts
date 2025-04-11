@@ -1,4 +1,4 @@
-import { Task } from "@/types";
+import { Task } from "@/lib/types";
 import { NextRequest, NextResponse } from 'next/server';
 
 const dummyData: Array<Task> = [

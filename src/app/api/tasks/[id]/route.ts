@@ -1,5 +1,5 @@
 import {NextRequest, NextResponse} from "next/server";
-import {RouteParams, Task} from "@/types";
+import {RouteParams, Task} from "@/lib/types";
 
 const dummyData: Array<Task> = [
     {
