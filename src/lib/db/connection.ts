@@ -1,10 +1,20 @@
 import sqlite3 from "sqlite3";
 import path from "path";
 
-const dbName = process.env.DB_NAME || "tasks.db";
-const dbPath = path.resolve(__dirname, dbName);
+const dbName = process.env.DB_NAME;
+const pathToDb = process.env.DB_PATH;
 
-const db = new sqlite3.Database(dbPath, (err) => {
+if (!dbName) {
+    throw new Error("DB_NAME environment variable is not set");
+}
+if (!pathToDb) {
+    throw new Error("DB_PATH environment variable is not set");
+}
+
+// construct the full path to the database file
+const fullDBPath = path.resolve(pathToDb, dbName);
+
+const db = new sqlite3.Database(fullDBPath, (err) => {
     if (err) {
         console.error("Error opening database: " + err.message);
         throw err;
