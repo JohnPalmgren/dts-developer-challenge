@@ -4,9 +4,9 @@ import {
     TaskInput
 } from "@/lib/types";
 
-const selectAllTasks = async () => {
+const selectAllTasks = async (): Promise<Task[]> => {
     return new Promise((resolve, reject) => {
-        db.all("SELECT * FROM tasks", [], (err, rows) => {
+        db.all("SELECT * FROM tasks", [], (err, rows: Task[]) => {
             if (err) {
                 reject(err);
             } else {
