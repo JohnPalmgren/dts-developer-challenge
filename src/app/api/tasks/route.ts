@@ -43,7 +43,7 @@ const dummyData: Array<Task> = [
 
 const GET = async () => {
     try {
-        const tasks = getAllTasks()
+        const tasks = await getAllTasks()
         return NextResponse.json(tasks, {status: 200, statusText: "OK"});
     }
     catch (error) {
