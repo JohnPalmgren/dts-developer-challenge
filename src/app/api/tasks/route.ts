@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {Task, TaskInput} from "@/lib/types";
 import {
-    getAllTasks,
-    createTask,
-    editTask
-} from "@/app/api/tasks/controller";
+    selectAllTasks,
+    insertTask,
+    updateTask
+} from "@/app/api/tasks/query";
 
 const GET = async () => {
     try {
-        const tasks = await getAllTasks()
+        const tasks = await selectAllTasks()
         return NextResponse.json(tasks, {status: 200, statusText: "OK"});
     }
     catch (error) {
@@ -23,7 +23,7 @@ const GET = async () => {
 const POST = async (request: NextRequest) => {
     // TODO add validation
     const newTask: TaskInput = await request.json();
-    const storedTask: Task = await createTask(newTask);
+    const storedTask: Task = await insertTask(newTask);
     return NextResponse.json(storedTask, {status: 200, statusText: "OK"});
 }
 
@@ -31,7 +31,7 @@ const PUT = async (request: NextRequest) => {
     // TODO add validation
     try {
         const updatedTask: Task = await request.json();
-        const storedTask: Task = await editTask(updatedTask);
+        const storedTask: Task = await updateTask(updatedTask);
         return NextResponse.json(storedTask, {status: 200, statusText: "OK"});
     } catch (error) {
         if (error instanceof Error) {
