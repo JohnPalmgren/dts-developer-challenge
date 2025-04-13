@@ -1,5 +1,12 @@
-import {TaskInput} from "@/lib/types";
-import {insertTask, selectAllTasks} from "@/app/api/tasks/query";
+import {
+    Task,
+    TaskInput
+} from "@/lib/types";
+import {
+    insertTask,
+    selectAllTasks,
+    updateTask
+} from "@/app/api/tasks/query";
 
 const getAllTasks = async () => {
     return selectAllTasks()
@@ -21,7 +28,12 @@ const createTask = async (task: TaskInput) => {
     }
 }
 
+const editTask = async (task: Task) => {
+    return updateTask(task)
+}
+
 export {
     getAllTasks,
-    createTask
+    createTask,
+    editTask
 };
