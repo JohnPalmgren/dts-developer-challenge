@@ -1,5 +1,7 @@
 import db from "@/lib/db/connection";
 import { Task, TaskInput } from "@/lib/schemas/task.schema";
+import { DatabaseFormattedTask } from "@/lib/types";
+import { convertTaskToDBFormat, convertTaskToAppFormat } from "@/lib/utils";
 
 const selectAllTasks = async (): Promise<Task[]> => {
 
@@ -9,11 +11,15 @@ const selectAllTasks = async (): Promise<Task[]> => {
     const params: [] = []
 
     return new Promise((resolve, reject) => {
-        db.all(sql, params, function (err, rows: Task[]) {
+        db.all(sql, params, function (err, rows: DatabaseFormattedTask[]) {
             if (err) {
                 reject(err);
             } else {
-                resolve(rows);
+                // convert from database format to app format
+                const formattedRows: Task[] = rows.map(row => {
+                    return convertTaskToAppFormat(row)
+                })
+                resolve(formattedRows);
             }
         });
     });
@@ -21,25 +27,29 @@ const selectAllTasks = async (): Promise<Task[]> => {
 
 const insertTask = async (task: TaskInput): Promise<Task> => {
 
+    const dbFormattedTask = convertTaskToDBFormat(task)
+
     const sql = `
         INSERT INTO tasks (title, description, completed, dueDate) 
         VALUES (?, ?, ?, ?)
         RETURNING *;
     `
     const params = [
-        task.title,
-        task.description,
-        task.completed,
-        task.dueDate
+        dbFormattedTask.title,
+        dbFormattedTask.description,
+        dbFormattedTask.completed,
+        dbFormattedTask.dueDate
     ]
 
     return new Promise((resolve, reject) => {
         db.get(
-            sql,params, function (err, row: Task|undefined) {
+            sql,params, function (err, row: DatabaseFormattedTask|undefined) {
                 if (err) {
                     reject(err);
                 } else if (row) {
-                    resolve(row);
+                    // Convert from database format to app format
+                    const appFormattedTask: Task = convertTaskToAppFormat(row);
+                    resolve(appFormattedTask);
                 } else {
                     console.warn("Task not found for insertTask.");
                     reject(new Error("Task not found."));
@@ -48,8 +58,6 @@ const insertTask = async (task: TaskInput): Promise<Task> => {
         );
     });
 }
-
-
 
 export {
     selectAllTasks,

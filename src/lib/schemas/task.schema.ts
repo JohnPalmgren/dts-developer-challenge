@@ -4,8 +4,8 @@ const TaskSchema = z.object({
     id: z.number().int().positive(),
     title: z.string().nonempty(),
     description: z.string().optional(),
-    completed: z.number().int().min(0).max(1),
-    dueDate: z.coerce.date().transform(date => date.toISOString()),
+    completed: z.boolean(),
+    dueDate: z.date(),
 });
 
 const TaskInputSchema = TaskSchema.omit({ id: true });
