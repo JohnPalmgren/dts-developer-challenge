@@ -1,5 +1,6 @@
 import {NextRequest, NextResponse} from "next/server";
-import {RouteParams, Task} from "@/lib/types";
+import { RouteParams } from "@/lib/types";
+import { TaskSchema, Task } from "@/lib/schemas/task.schema";
 import {
     selectTaskById,
     deleteTask,
@@ -21,13 +22,16 @@ const GET = async (request: NextRequest, { params }: RouteParams) => {
 }
 
 const PUT = async (request: NextRequest, { params }: RouteParams) => {
-    // TODO add validation
     // TODO check task id matches params
     // Updating id should be disallowed on the database level
     try {
         const id = parseInt((await params).id)
         const updatedTask: Task = await request.json();
-        const storedTask: Task = await updateTask(id, updatedTask);
+        const validationResult = TaskSchema.safeParse(updatedTask);
+        if (!validationResult.success) {
+            return NextResponse.json({ error: "Invalid input", details: validationResult.error.format() }, { status: 400 });
+        }
+        const storedTask: Task = await updateTask(id, validationResult.data);
         return NextResponse.json(storedTask, {status: 200, statusText: "OK"});
     } catch (error) {
         if (error instanceof Error) {

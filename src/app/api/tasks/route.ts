@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import {Task, TaskInput} from "@/lib/types";
-import {
-    selectAllTasks,
-    insertTask
-} from "@/app/api/tasks/query";
+import { TaskInputSchema, Task, TaskInput } from "@/lib/schemas/task.schema";
+import { selectAllTasks, insertTask } from "@/app/api/tasks/query";
 
 const GET = async () => {
     try {
@@ -20,10 +17,13 @@ const GET = async () => {
 }
 
 const POST = async (request: NextRequest) => {
-    // TODO add validation
     try {
         const newTask: TaskInput = await request.json();
-        const storedTask: Task = await insertTask(newTask);
+        const validationResult = TaskInputSchema.safeParse(newTask);
+        if (!validationResult.success) {
+            return NextResponse.json({ error: "Invalid input", details: validationResult.error.format() }, { status: 400 });
+        }
+        const storedTask: Task = await insertTask(validationResult.data);
         return NextResponse.json(storedTask, {status: 200, statusText: "OK"});
     } catch (error) {
         if (error instanceof Error) {
@@ -33,8 +33,6 @@ const POST = async (request: NextRequest) => {
         }
     }
 }
-
-
 
 export {
     GET,

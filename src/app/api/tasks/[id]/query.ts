@@ -1,7 +1,5 @@
 import db from "@/lib/db/connection";
-import {
-    Task
-} from "@/lib/types";
+import { Task } from "@/lib/schemas/task.schema";
 
 const selectTaskById = async (id: number): Promise<Task> => {
 
