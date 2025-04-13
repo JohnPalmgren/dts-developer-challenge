@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Task } from "@/lib/types";
-import { getAllTasks } from "@/app/api/tasks/controller";
+import {Task, TaskInput} from "@/lib/types";
+import {
+    getAllTasks,
+    createTask
+} from "@/app/api/tasks/controller";
 
 const dummyData: Array<Task> = [
     {
@@ -54,10 +57,9 @@ const GET = async () => {
 
 const POST = async (request: NextRequest) => {
     // TODO add validation
-    const newTask = await request.json();
-    newTask.id = Date.now()
-    dummyData.push(newTask);
-    return NextResponse.json(dummyData, {status: 200, statusText: "OK"});
+    const newTask: TaskInput = await request.json();
+    const storedTask: Task = await createTask(newTask);
+    return NextResponse.json(storedTask, {status: 200, statusText: "OK"});
 }
 
 const PUT = async (request: NextRequest) => {
