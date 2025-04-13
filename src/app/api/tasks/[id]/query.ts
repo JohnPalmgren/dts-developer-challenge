@@ -4,8 +4,15 @@ import {
 } from "@/lib/types";
 
 const selectTaskById = async (id: number): Promise<Task> => {
+
+    const sql = `
+        SELECT * FROM tasks
+        WHERE id = ?
+    `
+    const params = [id]
+
     return new Promise((resolve, reject) => {
-        db.get("SELECT * FROM tasks WHERE id = ?", [id], (err, row: Task|undefined) => {
+        db.get(sql, params, function (err, row: Task|undefined) {
             if (err) {
                 reject(err);
             } else if (row) {
@@ -19,8 +26,16 @@ const selectTaskById = async (id: number): Promise<Task> => {
 }
 
 const deleteTask = async (id: number): Promise<Task> => {
+
+    const sql = `
+        DELETE FROM tasks
+        WHERE id = ?
+        RETURNING *;
+    `
+    const params = [id]
+
     return new Promise((resolve, reject) => {
-        db.get("DELETE FROM tasks WHERE id = ? RETURNING *;", [id], (err, row: Task|undefined) => {
+        db.get(sql, params, function (err, row: Task|undefined) {
             if (err) {
                 reject(err);
             } else if (row) {
