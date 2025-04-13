@@ -13,19 +13,7 @@ const getAllTasks = async () => {
 }
 
 const createTask = async (task: TaskInput) => {
-    try {
-        const { id } = await insertTask(task);
-        return {
-            ...task,
-            id: id
-        };
-    } catch (error) {
-        if (error instanceof Error) {
-            throw new Error(error.message);
-        } else {
-            throw new Error("Internal Server Error");
-        }
-    }
+    return insertTask(task);
 }
 
 const editTask = async (task: Task) => {

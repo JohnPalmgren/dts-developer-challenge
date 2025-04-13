@@ -16,16 +16,19 @@ const selectAllTasks = async () => {
     });
 }
 
-const insertTask = async (task: TaskInput): Promise<{ id:number }> => {
+const insertTask = async (task: TaskInput): Promise<Task> => {
     return new Promise((resolve, reject) => {
-        db.run(
-            "INSERT INTO tasks (title, description, completed, dueDate) VALUES (?, ?, ?, ?)",
+        db.get(
+            "INSERT INTO tasks (title, description, completed, dueDate) VALUES (?, ?, ?, ?) RETURNING *;",
             [task.title, task.description, task.completed, task.dueDate],
-            function (err) {
+            function (err: Error|null, row: Task|undefined) {
                 if (err) {
                     reject(err);
+                } else if (row) {
+                    resolve(row);
                 } else {
-                    resolve({ id: this.lastID });
+                    console.warn("Task not found for insertTask.");
+                    reject(new Error("Task not found."));
                 }
             }
         );
