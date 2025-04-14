@@ -1,62 +1,63 @@
 import {NextRequest, NextResponse} from "next/server";
-import {RouteParams, Task} from "@/lib/types";
-
-const dummyData: Array<Task> = [
-    {
-        id: 0,
-        title: "task 1",
-        description: "description 1",
-        completed: false,
-        dueDate: new Date()
-    },
-    {
-        id: 1,
-        title: "task 2",
-        description: "description 2",
-        completed: false,
-        dueDate: new Date()
-    },
-    {
-        id: 2,
-        title: "task 3",
-        completed: false,
-        dueDate: new Date()
-    },
-    {
-        id: 3,
-        title: "task 4",
-        completed: true,
-        dueDate: new Date()
-    },
-    {
-        id: 4,
-        title: "task 5",
-        description: "description 5",
-        completed: true,
-        dueDate: new Date()
-    }
-]
+import { RouteParams } from "@/lib/types";
+import { TaskSchema, Task } from "@/lib/schemas/task.schema";
+import {
+    selectTaskById,
+    deleteTask,
+    updateTask
+} from "@/app/api/tasks/[id]/query";
 
 const GET = async (request: NextRequest, { params }: RouteParams) => {
     const id = parseInt((await params).id)
-    const task = dummyData.find((task) => task.id === id);
-    if (task) {
-        return NextResponse.json(task, {status: 200, statusText: "OK"})
+    try {
+        const task = await selectTaskById(id);
+        return NextResponse.json(task, {status: 200, statusText: "OK"});
+    } catch (error) {
+        if (error instanceof Error) {
+            return NextResponse.json({error: error.message}, {status: 500, statusText: error.message});
+        } else {
+            return NextResponse.json({error: "Internal Server Error"}, {status: 500, statusText: "Internal Server Error"});
+        }
     }
-    return NextResponse.json(dummyData, {status: 404, statusText: "Resource Not Found"})
+}
+
+const PUT = async (request: NextRequest, { params }: RouteParams) => {
+    // TODO check task id matches params
+    // Updating id should be disallowed on the database level
+    try {
+        const id = parseInt((await params).id)
+        const updatedTask: Task = await request.json();
+        const validationResult = TaskSchema.safeParse(updatedTask);
+        if (!validationResult.success) {
+            return NextResponse.json({ error: "Invalid input", details: validationResult.error.format() }, { status: 400 });
+        }
+        const storedTask: Task = await updateTask(id, validationResult.data);
+        return NextResponse.json(storedTask, {status: 200, statusText: "OK"});
+    } catch (error) {
+        if (error instanceof Error) {
+            return NextResponse.json({error: error.message}, {status: 500, statusText: error.message});
+        } else {
+            return NextResponse.json({error: "Internal Server Error"}, {status: 500, statusText: "Internal Server Error"});
+        }
+    }
 }
 
 const DELETE = async (request: NextRequest, { params }: RouteParams) => {
     const id = parseInt((await params).id)
-    const index = dummyData.findIndex((task) => task.id === id);
-    if (index !== -1) {
-        dummyData.splice(index, 1);
-        return NextResponse.json(dummyData, {status: 200, statusText: "OK"})
+    try {
+        const deletedTask = await deleteTask(id);
+        return NextResponse.json(deletedTask, {status: 200, statusText: "OK"});
+    } catch (error) {
+        if (error instanceof Error) {
+            return NextResponse.json({error: error.message}, {status: 500, statusText: error.message});
+        } else {
+            return NextResponse.json({error: "Internal Server Error"}, {status: 500, statusText: "Internal Server Error"});
+        }
     }
-    return NextResponse.json(dummyData, {status: 404, statusText: "Resource Not Found"})
 }
 
 export {
     GET,
-    DELETE,
+    PUT,
+    DELETE
 }

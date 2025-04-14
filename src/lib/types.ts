@@ -1,12 +1,12 @@
-interface Task {
+interface DatabaseFormattedTask {
     id: number;
     title: string;
     description?: string;
-    completed: boolean;
-    dueDate: Date;
+    completed: number;
+    dueDate: string;
 }
 
-type TaskInput = Omit<Task, 'id'>;
+type DatabaseFormattedInputTask = Omit<DatabaseFormattedTask, 'id'>;
 
 interface RouteParams {
     params: Promise<{
@@ -15,7 +15,7 @@ interface RouteParams {
 }
 
 export type {
-    Task,
-    TaskInput,
     RouteParams,
+    DatabaseFormattedTask,
+    DatabaseFormattedInputTask,
 };
