@@ -5,7 +5,7 @@ const TaskSchema = z.object({
     title: z.string().nonempty(),
     description: z.string().optional(),
     completed: z.boolean(),
-    dueDate: z.date(),
+    dueDate: z.coerce.date(),
 });
 
 const TaskInputSchema = TaskSchema.omit({ id: true });
