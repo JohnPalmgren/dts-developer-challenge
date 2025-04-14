@@ -1,3 +1,6 @@
+import { TaskSchema, TaskInputSchema } from "@/lib/schemas/task.schema";
+import { z } from "zod";
+
 interface DatabaseFormattedTask {
     id: number;
     title: string;
@@ -7,6 +10,10 @@ interface DatabaseFormattedTask {
 }
 
 type DatabaseFormattedInputTask = Omit<DatabaseFormattedTask, 'id'>;
+
+type Task = z.infer<typeof TaskSchema>;
+
+type TaskInput = z.infer<typeof TaskInputSchema>;
 
 interface RouteParams {
     params: Promise<{
@@ -18,4 +25,6 @@ export type {
     RouteParams,
     DatabaseFormattedTask,
     DatabaseFormattedInputTask,
+    Task,
+    TaskInput,
 };

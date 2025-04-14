@@ -1,6 +1,6 @@
 import {NextRequest, NextResponse} from "next/server";
-import { RouteParams } from "@/lib/types";
-import { TaskSchema, Task } from "@/lib/schemas/task.schema";
+import { RouteParams, Task } from "@/lib/types";
+import { TaskSchema } from "@/lib/schemas/task.schema";
 import {
     selectTaskById,
     deleteTask,

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { TaskInputSchema, Task, TaskInput } from "@/lib/schemas/task.schema";
+import { TaskInputSchema } from "@/lib/schemas/task.schema";
+import { Task, TaskInput } from "@/lib/types";
 import { selectAllTasks, insertTask } from "@/app/api/tasks/query";
 
 const GET = async () => {

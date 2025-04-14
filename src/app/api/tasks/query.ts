@@ -1,6 +1,9 @@
 import db from "@/lib/db/connection";
-import { Task, TaskInput } from "@/lib/schemas/task.schema";
-import { DatabaseFormattedTask } from "@/lib/types";
+import {
+    DatabaseFormattedTask,
+    Task,
+    TaskInput,
+} from "@/lib/types";
 import { convertTaskToDBFormat, convertTaskToAppFormat } from "@/lib/utils";
 
 const selectAllTasks = async (): Promise<Task[]> => {

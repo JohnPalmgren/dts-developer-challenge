@@ -10,16 +10,7 @@ const TaskSchema = z.object({
 
 const TaskInputSchema = TaskSchema.omit({ id: true });
 
-type Task = z.infer<typeof TaskSchema>;
-
-type TaskInput = z.infer<typeof TaskInputSchema>;
-
 export {
     TaskSchema,
     TaskInputSchema,
-}
-
-export type {
-    Task,
-    TaskInput,
 }
