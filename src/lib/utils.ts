@@ -57,6 +57,9 @@ const convertBoolToBin = (bool: boolean): number => {
  * @returns {boolean} Returns true if the input is 1, otherwise false.
  */
 const convertBinToBool = (bin: number): boolean => {
+    if(bin > 1 || bin < 0) {
+        throw new Error("Invalid binary value. Expected 0 or 1.");
+    }
     return bin === 1;
 }
 
@@ -109,6 +112,8 @@ function convertTaskToDBFormat(task: Task | TaskInput): DatabaseFormattedTask | 
 
 export {
     formatDate,
+    convertBoolToBin,
+    convertBinToBool,
     convertTaskToAppFormat,
     convertTaskToDBFormat,
 }
