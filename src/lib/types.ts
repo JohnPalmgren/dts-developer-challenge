@@ -1,6 +1,7 @@
 import { TaskSchema, TaskInputSchema } from "@/lib/schemas/task.schema";
 import { z } from "zod";
 
+// Database format stores the date as a string and completed as a number (0 or 1)
 interface DatabaseFormattedTask {
     id: number;
     title: string;
@@ -10,6 +11,15 @@ interface DatabaseFormattedTask {
 }
 
 type DatabaseFormattedInputTask = Omit<DatabaseFormattedTask, 'id'>;
+
+// Raw task format is used for API requests and responses and contains the date as a string
+interface RawTask {
+    id: number;
+    title: string;
+    description?: string;
+    completed: boolean;
+    dueDate: string;
+}
 
 type Task = z.infer<typeof TaskSchema>;
 
@@ -45,6 +55,7 @@ export type {
     RouteParams,
     DatabaseFormattedTask,
     DatabaseFormattedInputTask,
+    RawTask,
     Task,
     TaskInput,
     State,
