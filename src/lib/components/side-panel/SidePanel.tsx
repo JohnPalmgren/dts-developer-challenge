@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import styles from './SidePanel.module.css';
+import styles from './sidePanel.module.css';
 
 // user - shows logged-in user
 // add task * - modal to add task
