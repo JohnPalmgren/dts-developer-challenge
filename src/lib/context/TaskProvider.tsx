@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { TaskContext } from "@/lib/context/TaskContext";
 import { taskReducer, initialState } from "@/lib/context/taskReducer";
-import { Task, ActionTypes } from "@/lib/types";
+import { Task, RawTask, ActionTypes } from "@/lib/types";
 
 interface TaskProviderProps {
     children: ReactNode;
@@ -23,8 +23,13 @@ const TaskProvider: React.FC<TaskProviderProps> = ({ children }: TaskProviderPro
             if (!response.ok) {
                 throw new Error("Failed to fetch tasks");
             }
-            const data = await response.json();
-            dispatch({ type: ActionTypes.SET_TASKS, payload: data });
+            const data: RawTask[] = await response.json();
+            // Convert date string to Date object.
+            const tasksWithDates: Task[] = data.map((task: RawTask) => ({
+                ...task,
+                dueDate: new Date(task.dueDate),
+            }));
+            dispatch({ type: ActionTypes.SET_TASKS, payload: tasksWithDates });
         } catch (error) {
             if (error instanceof Error) {
                 dispatch({ type: ActionTypes.SET_ERROR, payload: error.message });
@@ -46,8 +51,13 @@ const TaskProvider: React.FC<TaskProviderProps> = ({ children }: TaskProviderPro
             if (!response.ok) {
                 throw new Error("Failed to add task");
             }
-            const data = await response.json();
-            dispatch({ type: ActionTypes.ADD_TASK, payload: data });
+            const data: RawTask = await response.json();
+            // Convert date string to Date object.
+            const taskWithDate: Task = {
+                ...data,
+                dueDate: new Date(data.dueDate),
+            };
+            dispatch({ type: ActionTypes.ADD_TASK, payload: taskWithDate });
         } catch (error) {
             if (error instanceof Error) {
                 dispatch({ type: ActionTypes.SET_ERROR, payload: error.message });
@@ -69,8 +79,13 @@ const TaskProvider: React.FC<TaskProviderProps> = ({ children }: TaskProviderPro
             if (!response.ok) {
                 throw new Error("Failed to update task");
             }
-            const data = await response.json();
-            dispatch({ type: ActionTypes.UPDATE_TASK, payload: data });
+            const data: RawTask = await response.json();
+            // Convert date string to Date object.
+            const taskWithDate: Task = {
+                ...data,
+                dueDate: new Date(data.dueDate),
+            };
+            dispatch({ type: ActionTypes.UPDATE_TASK, payload: taskWithDate });
         } catch (error) {
             if (error instanceof Error) {
                 dispatch({ type: ActionTypes.SET_ERROR, payload: error.message });
