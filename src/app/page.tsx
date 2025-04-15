@@ -1,52 +1,24 @@
+"use client";
 import styles from "./page.module.css";
 import { Task } from "@/lib/types";
+import { useTaskContext } from "@/lib/context/TaskContext";
 import { formatDate } from "@/lib/utils"
 import Image from "next/image";
 import binIcon from "../assets/bin.png";
 import pencilIcon from "../assets/pencil.png";
 
-const dummyData: Array<Task> = [
-    {
-        id: 0,
-        title: "task 1",
-        description: "description 1",
-        completed: false,
-        dueDate: new Date()
-    },
-    {
-        id: 1,
-        title: "task 2",
-        description: "description 2",
-        completed: false,
-        dueDate: new Date()
-    },
-    {
-        id: 2,
-        title: "task 3",
-        completed: false,
-        dueDate: new Date()
-    },
-    {
-        id: 3,
-        title: "task 4",
-        completed: true,
-        dueDate: new Date()
-    },
-    {
-        id: 4,
-        title: "task 5",
-        description: "description 5",
-        completed: true,
-        dueDate: new Date()
-    }
-]
 
+// TODO create logic in component and import
 export default function Home() {
+
+    const { state, fetchTasks, addTask, updateTask, removeTask } = useTaskContext();
+    const {tasks, error} = state;
+
     return (
         <div className={styles.wrapper}>
             <h1>All Tasks</h1>
             <ul className={styles.list}>
-                {dummyData.map((task) => (
+                {tasks.map((task: Task) => (
                     <li key={task.id} className={styles.task}>
                         <div className={styles.listWrapper}>
                             <div>
