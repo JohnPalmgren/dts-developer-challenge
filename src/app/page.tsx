@@ -1,4 +1,5 @@
 "use client";
+import React from "react";
 import styles from "./page.module.css";
 import { Task } from "@/lib/types";
 import { useTaskContext } from "@/lib/context/TaskContext";
@@ -11,14 +12,19 @@ import pencilIcon from "../assets/pencil.png";
 // TODO create logic in component and import
 export default function Home() {
 
-    const { state, fetchTasks, addTask, updateTask, removeTask } = useTaskContext();
+    const { state, fetchTasks, updateTask, removeTask } = useTaskContext();
     const {tasks, error} = state;
+
+    const checkBoxHandler = async (e: React.ChangeEvent<HTMLInputElement>, task: Task) => {
+        const updatedTask = { ...task, completed: e.target.checked };
+        await updateTask(updatedTask);
+    }
 
     return (
         <div className={styles.wrapper}>
             <h1>All Tasks</h1>
             <ul className={styles.list}>
-                {tasks.map((task: Task) => (
+                { tasks.map((task: Task) => (
                     <li key={task.id} className={styles.task}>
                         <div className={styles.listWrapper}>
                             <div>
@@ -27,6 +33,8 @@ export default function Home() {
                                     type="checkbox"
                                     id={task.id.toString()}
                                     name={task.title}
+                                    checked={task.completed}
+                                    onChange={ (e) => checkBoxHandler(e, task) }
                                 />
                             </div>
                             <div>
