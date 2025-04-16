@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import styles from "./editTaskModal.module.css"
 import { Task } from "@/lib/types";
 import ModalLayout from "@/lib/components/modal-layout/ModelLayout";
@@ -7,14 +7,19 @@ import {formatDateToYYYYMMDD} from "@/lib/utils";
 
 // TODO add validation
 
-const EditTaskModal = ({task, hidden}: {task: Task, hidden: boolean}) => {
+const EditTaskModal = ({task, hidden, setHideModal}: {task: Task, hidden: boolean, setHideModal: (hidden: boolean) => void}) => {
 
     const { updateTask } = useTaskContext();
 
     const [ title, setTitle ] = React.useState(task.title);
     const [ description, setDescription ] = React.useState(task.description);
     const [ dueDate, setDueDate ] = React.useState(task.dueDate);
-    const [ hideModal, setHideModal ] = React.useState(hidden);
+
+    useEffect(() => {
+        setTitle(task.title);
+        setDescription(task.description);
+        setDueDate(task.dueDate);
+    }, [task]);
 
     const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -30,7 +35,7 @@ const EditTaskModal = ({task, hidden}: {task: Task, hidden: boolean}) => {
     }
 
     return (
-        <ModalLayout hidden={hideModal}>
+        <ModalLayout hidden={hidden} setHideModal={setHideModal}>
             <h1 className={styles.heading}>Edit Task</h1>
             <div className={styles.formWrapper}>
                 <form className={styles.form} onSubmit={submitHandler}>

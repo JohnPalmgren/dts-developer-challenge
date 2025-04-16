@@ -1,9 +1,10 @@
 "use client";
-import React from "react";
+import React, {useState} from "react";
+import EditTaskModal from "@/lib/components/edit-task-modal/EditTaskModal";
 import styles from "./page.module.css";
 import { Task } from "@/lib/types";
 import { useTaskContext } from "@/lib/context/TaskContext";
-import { formatDate } from "@/lib/utils"
+import { formatDateForDisplay } from "@/lib/utils"
 import Image from "next/image";
 import binIcon from "../assets/bin.png";
 import pencilIcon from "../assets/pencil.png";
@@ -12,7 +13,16 @@ import pencilIcon from "../assets/pencil.png";
 // TODO create logic in component and import
 export default function Home() {
 
-    const { state, fetchTasks, updateTask, removeTask } = useTaskContext();
+    const [hideModal, setHideModal] = useState(true);
+    const [targetTask, setTargetTask] = useState<Task>({
+        id: 0,
+        title: "",
+        description: "",
+        completed: false,
+        dueDate: new Date()
+    })
+
+    const { state, updateTask } = useTaskContext();
     const {tasks, error} = state;
 
     const checkBoxHandler = async (e: React.ChangeEvent<HTMLInputElement>, task: Task) => {
@@ -20,8 +30,14 @@ export default function Home() {
         await updateTask(updatedTask);
     }
 
+    const editTaskHandler = (task: Task) => {
+        setTargetTask(task);
+        setHideModal(false);
+    }
+
     return (
         <div className={styles.wrapper}>
+            <EditTaskModal task={targetTask} hidden={hideModal} setHideModal = {setHideModal}/>
             <h1>All Tasks</h1>
             <ul className={styles.list}>
                 { tasks.map((task: Task) => (
@@ -40,10 +56,10 @@ export default function Home() {
                             <div>
                                 <h2>{task.title}</h2>
                                 <p>{task.description}</p>
-                                <p>Due: {formatDate(task.dueDate)}</p>
+                                <p>Due: {formatDateForDisplay(task.dueDate)}</p>
                             </div>
                             <div className={styles.buttonsWrapper}>
-                                <button className={styles.editButton}>
+                                <button className={styles.editButton} onClick={editTaskHandler.bind(null, task)}>
                                     <Image src={pencilIcon} alt="edit" width={20} height={20} />
                                 </button>
                                 <button className={styles.deleteButton}>
