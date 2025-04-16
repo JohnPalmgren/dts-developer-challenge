@@ -6,4 +6,14 @@
     padding: 20px;
 }
 
+.hide {
+    visibility: hidden;
+}
+
+.show {
+    visibility: visible;
+}
+
+
+
 /*TODO add media queries*/

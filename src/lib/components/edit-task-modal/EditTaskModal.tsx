@@ -14,6 +14,7 @@ const EditTaskModal = ({task, hidden}: {task: Task, hidden: boolean}) => {
     const [ title, setTitle ] = React.useState(task.title);
     const [ description, setDescription ] = React.useState(task.description);
     const [ dueDate, setDueDate ] = React.useState(task.dueDate);
+    const [ hideModal, setHideModal ] = React.useState(hidden);
 
     const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -25,10 +26,11 @@ const EditTaskModal = ({task, hidden}: {task: Task, hidden: boolean}) => {
             dueDate: new Date(dueDate)
         }
         await updateTask(updatedTask);
+        setHideModal(true);
     }
 
     return (
-        <ModalLayout>
+        <ModalLayout hidden={hideModal}>
             <h1 className={styles.heading}>Edit Task</h1>
             <div className={styles.formWrapper}>
                 <form className={styles.form} onSubmit={submitHandler}>
@@ -63,7 +65,7 @@ const EditTaskModal = ({task, hidden}: {task: Task, hidden: boolean}) => {
                     </div>
                     <div className={styles.buttonsWrapper}>
                         <button type="submit" className="primaryButton">Save Changes</button>
-                        <button className="secondaryButton">Cancel</button>
+                        <button type="button" className="secondaryButton" onClick={() => setHideModal(true)}>Cancel</button>
                     </div>
                 </form>
             </div>
