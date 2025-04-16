@@ -1,12 +1,13 @@
 import {
     formatDateForDisplay,
+    formatDateToYYYYMMDD,
     convertBoolToBin,
     convertBinToBool,
     convertTaskToAppFormat,
     convertTaskToDBFormat,
 } from './utils';
 
-describe('formatDate', () => {
+describe('formatDateForDisplay', () => {
     it('should format a date with "st" suffix for days ending in 1 (except 11)', () => {
         const date = new Date(2023, 3, 1); // April 1, 2023, 16:00
         expect(formatDateForDisplay(date)).toBe('1st April 23');
@@ -41,6 +42,18 @@ describe('formatDate', () => {
         expect(formatDateForDisplay(date)).toBe('9th June 23');
     });
 });
+
+describe('formatDateToYYYYMMDD', () => {
+    it('should format a date to YYYY-MM-DD', () => {
+        const date = new Date(2025, 3, 14); // April 14, 2025
+        expect(formatDateToYYYYMMDD(date)).toBe('2025-04-14');
+    });
+
+    it('should handle single-digit months and days with leading zeros', () => {
+        const date = new Date(2024, 0, 5); // January 5, 2024
+        expect(formatDateToYYYYMMDD(date)).toBe('2024-01-05');
+    });
+})
 
 describe('convertBoolToBin', () => {
     it('should return 1 for true', () => {
