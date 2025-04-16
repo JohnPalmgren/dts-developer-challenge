@@ -11,9 +11,6 @@ import {
  * @returns A string representing the date in the specified format
  */
 const formatDateForDisplay = (date: Date): string => {
-    // Get hours and minutes with leading zeros if needed
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
 
     // Get the day of the month
     const day = date.getDate();
@@ -39,7 +36,7 @@ const formatDateForDisplay = (date: Date): string => {
     const year = date.getFullYear().toString().slice(-2);
 
     // Combine all parts into the desired format
-    return `${hours}:${minutes} ${day}${daySuffix} ${month} ${year}`;
+    return `${day}${daySuffix} ${month} ${year}`;
 }
 
 /**
