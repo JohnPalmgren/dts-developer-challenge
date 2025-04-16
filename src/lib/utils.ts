@@ -1,12 +1,16 @@
-import {Task, TaskInput} from "@/lib/schemas/task.schema";
-import {DatabaseFormattedTask, DatabaseFormattedInputTask} from "@/lib/types";
+import {
+    DatabaseFormattedTask,
+    DatabaseFormattedInputTask,
+    TaskInput,
+    Task
+} from "@/lib/types";
 
 /**
  * Formats a date object to a string in the format time day month year eg "16:00 9th April 25"
  * @param date - The date object to format
  * @returns A string representing the date in the specified format
  */
-const formatDate = (date: Date): string => {
+const formatDateForDisplay = (date: Date): string => {
     // Get hours and minutes with leading zeros if needed
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
@@ -36,6 +40,19 @@ const formatDate = (date: Date): string => {
 
     // Combine all parts into the desired format
     return `${hours}:${minutes} ${day}${daySuffix} ${month} ${year}`;
+}
+
+/**
+ * Formats a date object to a string in the format YYYY-MM-DD.
+ *
+ * @param {Date} date - The date object to format.
+ * @returns {string} Returns the formatted date string in YYYY-MM-DD format.
+ */
+const formatDateToYYYYMMDD = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
 }
 
 /**
@@ -111,7 +128,8 @@ function convertTaskToDBFormat(task: Task | TaskInput): DatabaseFormattedTask | 
 }
 
 export {
-    formatDate,
+    formatDateForDisplay,
+    formatDateToYYYYMMDD,
     convertBoolToBin,
     convertBinToBool,
     convertTaskToAppFormat,
