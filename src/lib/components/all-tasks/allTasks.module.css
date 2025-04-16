@@ -1,0 +1,42 @@
+
+.wrapper {
+    margin: 30px 0 0 20px;
+}
+
+.list {
+    list-style-type: none;
+    margin-top: 50px;
+}
+
+.list li {
+    margin: 30px 0;
+}
+
+.deleteButton, .editButton {
+    background: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    border: 1px solid #000;
+    border-radius: 5px;
+}
+
+.checkbox {
+    width: 20px;
+    height: 20px;
+}
+
+.deleteButton:hover, .editButton:hover {
+    background-color: var(--accent);
+}
+
+.listWrapper {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.buttonsWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
