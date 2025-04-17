@@ -1,6 +1,7 @@
 "use client";
 import React, {useState} from "react";
 import EditTaskModal from "@/lib/components/edit-task-modal/EditTaskModal";
+import DeleteTaskModal from "@/lib/components/delete-task-modal/DeleteTaskModal";
 import styles from "@/lib/components/all-tasks/allTasks.module.css";
 import {Task} from "@/lib/types";
 import {useTaskContext} from "@/lib/context/TaskContext";
@@ -11,9 +12,10 @@ import pencilIcon from "../../../assets/pencil.png"
 
 const AllTasks = () => {
 
-    const [hideModal, setHideModal] = useState(true);
+    const [hideEditModal, setHideEditModal] = useState(true);
+    const [hideDeleteModal, setHideDeleteModal] = useState(true);
     const [targetTask, setTargetTask] = useState<Task>({
-        id: 0,
+        id: -1,
         title: "",
         description: "",
         completed: false,
@@ -30,12 +32,18 @@ const AllTasks = () => {
 
     const editTaskHandler = (task: Task) => {
         setTargetTask(task);
-        setHideModal(false);
+        setHideEditModal(false);
+    }
+
+    const deleteTaskHandler = (task: Task) => {
+        setTargetTask(task);
+        setHideDeleteModal(false);
     }
 
     return (
         <div className={styles.wrapper}>
-            <EditTaskModal task={targetTask} hidden={hideModal} setHideModal={setHideModal}/>
+            <EditTaskModal task={targetTask} hidden={hideEditModal} setHideModal={setHideEditModal}/>
+            <DeleteTaskModal task={targetTask} hidden={hideDeleteModal} setHideModal={setHideDeleteModal}/>
             <h1>All Tasks</h1>
             <ul className={styles.list}>
                 {tasks.map((task: Task) => (
@@ -60,7 +68,7 @@ const AllTasks = () => {
                                 <button className={styles.editButton} onClick={editTaskHandler.bind(null, task)}>
                                     <Image src={pencilIcon} alt="edit" width={20} height={20}/>
                                 </button>
-                                <button className={styles.deleteButton}>
+                                <button className={styles.deleteButton} onClick={deleteTaskHandler.bind(null, task)}>
                                     <Image src={binIcon} alt="delete" width={20} height={20}/>
                                 </button>
                             </div>
