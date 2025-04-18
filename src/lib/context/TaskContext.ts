@@ -1,13 +1,13 @@
 "use client";
 import { useContext, createContext, Dispatch } from 'react';
-import { State, Action, Task } from '@/lib/types';
+import { State, Action, Task, TaskInput } from '@/lib/types';
 import { initialState } from '@/lib/context/taskReducer';
 
 interface TaskContextProps {
     state: State;
     dispatch: Dispatch<Action>;
     fetchTasks: () => Promise<void>;
-    addTask: (task: Task) => Promise<void>;
+    addTask: (task: TaskInput) => Promise<void>;
     updateTask: (task: Task) => Promise<void>;
     removeTask: (id: Task['id']) => Promise<void>;
 }

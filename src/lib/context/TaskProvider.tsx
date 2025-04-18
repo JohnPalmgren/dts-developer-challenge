@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { TaskContext } from "@/lib/context/TaskContext";
 import { taskReducer, initialState } from "@/lib/context/taskReducer";
-import { Task, RawTask, ActionTypes } from "@/lib/types";
+import { Task, RawTask, TaskInput, ActionTypes } from "@/lib/types";
 
 interface TaskProviderProps {
     children: ReactNode;
@@ -39,7 +39,7 @@ const TaskProvider: React.FC<TaskProviderProps> = ({ children }: TaskProviderPro
         }
     }, []);
 
-    const addTask = useCallback(async (task: Task) => {
+    const addTask = useCallback(async (task: TaskInput) => {
         try {
             const response = await fetch("/api/tasks", {
                 method: "POST",
