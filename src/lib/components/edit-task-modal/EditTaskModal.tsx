@@ -46,6 +46,7 @@ const EditTaskModal = ({task, hidden, setHideModal}: {task: Task, hidden: boolea
                             id="title"
                             name="title"
                             value={title}
+                            required
                             onChange={(e) => setTitle(e.target.value)}
                         />
                     </div>
@@ -65,6 +66,7 @@ const EditTaskModal = ({task, hidden, setHideModal}: {task: Task, hidden: boolea
                             id="dueDate"
                             name="dueDate"
                             value={formatDateToYYYYMMDD(dueDate)}
+                            required
                             onChange={(e) => {setDueDate(new Date(e.target.value))}}
                         />
                     </div>
