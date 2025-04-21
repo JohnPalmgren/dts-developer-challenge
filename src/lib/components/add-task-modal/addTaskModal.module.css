@@ -1,0 +1,52 @@
+.heading {
+    text-align: center;
+}
+
+.formWrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.form {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.formItem {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    margin-top: 20px;
+}
+
+.formItem textarea {
+    width: 70%;
+    height: 100px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.formItem input {
+    width: 70%;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.buttonsWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}

@@ -1,46 +1,59 @@
 import {
-    formatDate,
+    formatDateForDisplay,
+    formatDateToYYYYMMDD,
     convertBoolToBin,
     convertBinToBool,
     convertTaskToAppFormat,
     convertTaskToDBFormat,
 } from './utils';
 
-describe('formatDate', () => {
+describe('formatDateForDisplay', () => {
     it('should format a date with "st" suffix for days ending in 1 (except 11)', () => {
-        const date = new Date(2023, 3, 1, 16, 0); // April 1, 2023, 16:00
-        expect(formatDate(date)).toBe('16:00 1st April 23');
+        const date = new Date(2023, 3, 1); // April 1, 2023, 16:00
+        expect(formatDateForDisplay(date)).toBe('1st April 23');
     });
 
     it('should format a date with "nd" suffix for days ending in 2 (except 12)', () => {
-        const date = new Date(2023, 3, 2, 9, 5); // April 2, 2023, 09:05
-        expect(formatDate(date)).toBe('09:05 2nd April 23');
+        const date = new Date(2023, 3, 2); // April 2, 2023, 09:05
+        expect(formatDateForDisplay(date)).toBe('2nd April 23');
     });
 
     it('should format a date with "rd" suffix for days ending in 3 (except 13)', () => {
-        const date = new Date(2023, 3, 3, 23, 59); // April 3, 2023, 23:59
-        expect(formatDate(date)).toBe('23:59 3rd April 23');
+        const date = new Date(2023, 3, 3); // April 3, 2023
+        expect(formatDateForDisplay(date)).toBe('3rd April 23');
     });
 
     it('should format a date with "th" suffix for days ending in 4-9, 0, or 11-13', () => {
-        const date1 = new Date(2023, 3, 4, 12, 30); // April 4, 2023, 12:30
-        const date2 = new Date(2023, 3, 11, 8, 15); // April 11, 2023, 08:15
-        const date3 = new Date(2023, 3, 13, 14, 45); // April 13, 2023, 14:45
-        expect(formatDate(date1)).toBe('12:30 4th April 23');
-        expect(formatDate(date2)).toBe('08:15 11th April 23');
-        expect(formatDate(date3)).toBe('14:45 13th April 23');
+        const date1 = new Date(2023, 3, 4); // April 4, 2023
+        const date2 = new Date(2023, 3, 11); // April 11, 2023
+        const date3 = new Date(2023, 3, 13); // April 13, 2023
+        expect(formatDateForDisplay(date1)).toBe('4th April 23');
+        expect(formatDateForDisplay(date2)).toBe('11th April 23');
+        expect(formatDateForDisplay(date3)).toBe('13th April 23');
     });
 
     it('should format a date with the correct month name', () => {
-        const date = new Date(2023, 0, 15, 10, 0); // January 15, 2023, 10:00
-        expect(formatDate(date)).toBe('10:00 15th January 23');
+        const date = new Date(2023, 0, 15); // January 15, 2023
+        expect(formatDateForDisplay(date)).toBe('15th January 23');
     });
 
     it('should handle single-digit hours and minutes with leading zeros', () => {
-        const date = new Date(2023, 5, 9, 5, 7); // June 9, 2023, 05:07
-        expect(formatDate(date)).toBe('05:07 9th June 23');
+        const date = new Date(2023, 5, 9); // June 9, 2023
+        expect(formatDateForDisplay(date)).toBe('9th June 23');
     });
 });
+
+describe('formatDateToYYYYMMDD', () => {
+    it('should format a date to YYYY-MM-DD', () => {
+        const date = new Date(2025, 3, 14); // April 14, 2025
+        expect(formatDateToYYYYMMDD(date)).toBe('2025-04-14');
+    });
+
+    it('should handle single-digit months and days with leading zeros', () => {
+        const date = new Date(2024, 0, 5); // January 5, 2024
+        expect(formatDateToYYYYMMDD(date)).toBe('2024-01-05');
+    });
+})
 
 describe('convertBoolToBin', () => {
     it('should return 1 for true', () => {

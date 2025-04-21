@@ -1,5 +1,9 @@
+"use client";
+import {useState} from 'react';
 import Link from 'next/link';
-import styles from './SidePanel.module.css';
+import styles from './sidePanel.module.css';
+import AddTaskModal from '../add-task-modal/AddTaskModal';
+
 
 // user - shows logged-in user
 // add task * - modal to add task
@@ -7,12 +11,16 @@ import styles from './SidePanel.module.css';
 // today's tasks - shows tasks due today
 // bin - show soft deleted tasks
 
-export default function SidePanel () {
-    return(
+
+export default function SidePanel() {
+    const [hideAddModal, setHideAddModal] = useState(true);
+
+    return (
         <>
+            <AddTaskModal hidden={hideAddModal} setHideModal={setHideAddModal} />
             <div className={styles.panel}>
                 <div className={styles.wrapper}>
-                    <button className={styles.addTask}>+ Add task</button>
+                    <button className={styles.addTask} onClick={() => setHideAddModal(false)}>+ Add task</button>
                     <Link href="/">View all tasks</Link>
                 </div>
             </div>

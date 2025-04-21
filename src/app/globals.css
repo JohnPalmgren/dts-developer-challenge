@@ -27,6 +27,33 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+  font-weight: bold;
+}
+
+button:hover {
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.8);
+}
+
+.primaryButton {
+  background-color: var(--accent);
+  color: var(--background);
+}
+
+.secondaryButton {
+  background-color: #D3D3D3FF;
+  color: #000;
+}
+
+.dangerButton {
+  background-color: #FF0000;
+  color: #FFFFFF;
+}
+
 * {
   box-sizing: border-box;
   padding: 0;

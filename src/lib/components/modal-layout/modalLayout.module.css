@@ -1,0 +1,20 @@
+.modalContent {
+    position: absolute;
+    width: 500px;
+    background-color: var(--background);
+    border-radius: 10px;
+    padding: 20px;
+    z-index: 100;
+}
+
+.hide {
+    visibility: hidden;
+}
+
+.show {
+    visibility: visible;
+}
+
+
+
+/*TODO add media queries*/

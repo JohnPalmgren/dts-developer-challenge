@@ -1,0 +1,45 @@
+.heading {
+    text-align: center;
+}
+
+.formWrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.form {
+   margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.formItem {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+}
+
+.formItem textarea {
+    width: 70%;
+    height: 100px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.formItem input {
+    width: 70%;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.buttonsWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
