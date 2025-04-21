@@ -45,37 +45,38 @@ const AllTasks = () => {
             <EditTaskModal task={targetTask} hidden={hideEditModal} setHideModal={setHideEditModal}/>
             <DeleteTaskModal task={targetTask} hidden={hideDeleteModal} setHideModal={setHideDeleteModal}/>
             <h1>All Tasks</h1>
-            <ul className={styles.list}>
-                {tasks.map((task: Task) => (
-                    <li key={task.id} className={styles.task}>
-                        <div className={styles.listWrapper}>
-                            <div>
-                                <input
-                                    className={styles.checkbox}
-                                    type="checkbox"
-                                    id={task.id.toString()}
-                                    name={task.title}
-                                    checked={task.completed}
-                                    onChange={(e) => checkBoxHandler(e, task)}
-                                />
+                <ul className={styles.list}>
+                    {tasks.map((task: Task) => (
+                        <li key={task.id} className={styles.task}>
+                            <div className={styles.listItemWrapper}>
+                                <div>
+                                    <input
+                                        className={styles.checkbox}
+                                        type="checkbox"
+                                        id={task.id.toString()}
+                                        name={task.title}
+                                        checked={task.completed}
+                                        onChange={(e) => checkBoxHandler(e, task)}
+                                    />
+                                </div>
+                                <div className={styles.content}>
+                                    <h2>{task.title}</h2>
+                                    <p>{task.description}</p>
+                                    <p>{formatDateForDisplay(task.dueDate)}</p>
+                                </div>
+                                <div className={styles.buttonsWrapper}>
+                                    <button className={styles.editButton} onClick={editTaskHandler.bind(null, task)}>
+                                        <Image src={pencilIcon} alt="edit" width={20} height={20}/>
+                                    </button>
+                                    <button className={styles.deleteButton}
+                                            onClick={deleteTaskHandler.bind(null, task)}>
+                                        <Image src={binIcon} alt="delete" width={20} height={20}/>
+                                    </button>
+                                </div>
                             </div>
-                            <div>
-                                <h2>{task.title}</h2>
-                                <p>{task.description}</p>
-                                <p>Due: {formatDateForDisplay(task.dueDate)}</p>
-                            </div>
-                            <div className={styles.buttonsWrapper}>
-                                <button className={styles.editButton} onClick={editTaskHandler.bind(null, task)}>
-                                    <Image src={pencilIcon} alt="edit" width={20} height={20}/>
-                                </button>
-                                <button className={styles.deleteButton} onClick={deleteTaskHandler.bind(null, task)}>
-                                    <Image src={binIcon} alt="delete" width={20} height={20}/>
-                                </button>
-                            </div>
-                        </div>
-                    </li>
-                ))}
-            </ul>
+                        </li>
+                    ))}
+                </ul>
         </div>
     );
 }
