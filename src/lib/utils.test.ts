@@ -105,25 +105,44 @@ describe('convertTaskToAppFormat', () => {
         expect(convertTaskToAppFormat(taskFromDatabase)).toEqual(convertedTask);
     });
 
-    it('should convert the object without a description present', () => {
-        const dateString = '2025-04-14T09:55:42.000Z'
-
+    it('should strip the description field if it is null', () => {
         const taskFromDatabase = {
             id: 1,
             title: 'Test Task',
+            description: null,
             completed: 0,
-            dueDate: dateString,
+            dueDate: '2025-04-14T09:55:42.000Z',
         };
 
-        const convertedTask = {
+        const expectedTask = {
             id: 1,
             title: 'Test Task',
             completed: false,
-            dueDate: new Date(dateString),
+            dueDate: new Date('2025-04-14T09:55:42.000Z'),
         };
 
-        expect(convertTaskToAppFormat(taskFromDatabase)).toEqual(convertedTask);
-    })
+        expect(convertTaskToAppFormat(taskFromDatabase)).toEqual(expectedTask);
+    });
+
+    it('should not strip the description field if it is not null', () => {
+        const taskFromDatabase = {
+            id: 1,
+            title: 'Test Task',
+            description: 'This is a test task.',
+            completed: 0,
+            dueDate: '2025-04-14T09:55:42.000Z',
+        };
+
+        const expectedTask = {
+            id: 1,
+            title: 'Test Task',
+            description: 'This is a test task.',
+            completed: false,
+            dueDate: new Date('2025-04-14T09:55:42.000Z'),
+        };
+
+        expect(convertTaskToAppFormat(taskFromDatabase)).toEqual(expectedTask);
+    });
 })
 
 describe('convertTaskToDBFormat', () => {
