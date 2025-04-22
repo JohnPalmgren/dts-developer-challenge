@@ -5,7 +5,7 @@ import { z } from "zod";
 interface DatabaseFormattedTask {
     id: number;
     title: string;
-    description?: string;
+    description: string | null;
     completed: number;
     dueDate: string;
 }

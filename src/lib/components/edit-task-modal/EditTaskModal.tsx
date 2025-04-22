@@ -23,13 +23,26 @@ const EditTaskModal = ({task, hidden, setHideModal}: {task: Task, hidden: boolea
 
     const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const updatedTask = {
-            ...task,
-            title,
-            description,
-            completed: task.completed,
-            dueDate: new Date(dueDate)
+
+        let updatedTask: Task;
+
+        if (!description) {
+            updatedTask = {
+                ...task,
+                title,
+                completed: task.completed,
+                dueDate: new Date(dueDate)
+            }
+        } else {
+            updatedTask = {
+                ...task,
+                title,
+                description,
+                completed: task.completed,
+                dueDate: new Date(dueDate)
+            }
         }
+
         await updateTask(updatedTask);
         setHideModal(true);
     }
