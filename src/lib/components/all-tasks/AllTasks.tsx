@@ -1,5 +1,5 @@
 "use client";
-import React, {useEffect, useState} from "react";
+import React, { useState} from "react";
 import EditTaskModal from "@/lib/components/edit-task-modal/EditTaskModal";
 import DeleteTaskModal from "@/lib/components/delete-task-modal/DeleteTaskModal";
 import styles from "@/lib/components/all-tasks/allTasks.module.css";
