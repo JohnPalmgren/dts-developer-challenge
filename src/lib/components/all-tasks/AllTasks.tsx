@@ -1,5 +1,5 @@
 "use client";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import EditTaskModal from "@/lib/components/edit-task-modal/EditTaskModal";
 import DeleteTaskModal from "@/lib/components/delete-task-modal/DeleteTaskModal";
 import styles from "@/lib/components/all-tasks/allTasks.module.css";
@@ -25,6 +25,15 @@ const AllTasks = () => {
     const {state, updateTask} = useTaskContext();
     const {tasks, error} = state;
 
+    const orderByCompleted = (tasks: Task[]) => {
+        return tasks.sort((a, b) => {
+            if (a.completed === b.completed) {
+                return 0;
+            }
+            return a.completed ? 1 : -1;
+        });
+    }
+
     const checkBoxHandler = async (e: React.ChangeEvent<HTMLInputElement>, task: Task) => {
         const updatedTask = {...task, completed: e.target.checked};
         await updateTask(updatedTask);
@@ -46,7 +55,7 @@ const AllTasks = () => {
             <DeleteTaskModal task={targetTask} hidden={hideDeleteModal} setHideModal={setHideDeleteModal}/>
             <h1>All Tasks</h1>
                 <ul className={styles.list}>
-                    {tasks.map((task: Task) => (
+                    {orderByCompleted(tasks).map((task: Task) => (
                         <li key={task.id} className={styles.task}>
                             <div className={styles.listItemWrapper}>
                                 <div>
