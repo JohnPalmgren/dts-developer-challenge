@@ -142,6 +142,21 @@ function convertTaskToDBFormat(task: Task | TaskInput): DatabaseFormattedTask | 
     };
 }
 
+/**
+ * Checks if a task is overdue. A task is overdue if its due date is before the current day.
+ *
+ * @param {Date} dueDate - The due date of the task.
+ * @returns {boolean} Returns true if the task is overdue, otherwise false.
+ */
+const taskIsOverdue = (dueDate: Date): boolean => {
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const effectiveDueDate = new Date(dueDate);
+    effectiveDueDate.setHours(0, 0, 0, 0);
+    return effectiveDueDate < today;
+}
+
 export {
     formatDateForDisplay,
     formatDateToYYYYMMDD,
@@ -149,4 +164,5 @@ export {
     convertBinToBool,
     convertTaskToAppFormat,
     convertTaskToDBFormat,
+    taskIsOverdue
 }
