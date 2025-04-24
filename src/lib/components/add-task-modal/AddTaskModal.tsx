@@ -34,7 +34,6 @@ const AddTaskModal = ({hidden, setHideModal}: { hidden: boolean, setHideModal: (
                 dueDate: new Date(dueDate),
             }
         }
-        console.log(newTask);
         await addTask(newTask)
         form.reset()
         setHideModal(true);
