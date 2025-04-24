@@ -64,6 +64,7 @@ const AddTaskModal = ({hidden, setHideModal}: { hidden: boolean, setHideModal: (
                     <div className={styles.formItem}>
                         <label htmlFor="dueDate">Due Date</label>
                         <input
+                            defaultValue={new Date().toISOString().split("T")[0]}
                             type="date"
                             id="dueDate"
                             name="dueDate"
