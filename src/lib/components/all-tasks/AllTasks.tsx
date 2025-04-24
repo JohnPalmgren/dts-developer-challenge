@@ -5,7 +5,7 @@ import DeleteTaskModal from "@/lib/components/delete-task-modal/DeleteTaskModal"
 import styles from "@/lib/components/all-tasks/allTasks.module.css";
 import {Task} from "@/lib/types";
 import {useTaskContext} from "@/lib/context/TaskContext";
-import {formatDateForDisplay} from "@/lib/utils"
+import {formatDateForDisplay, taskIsOverdue} from "@/lib/utils"
 import Image from "next/image";
 import binIcon from "../../../assets/bin.png";
 import pencilIcon from "../../../assets/pencil.png"
@@ -71,7 +71,7 @@ const AllTasks = () => {
                                 <div className={styles.content}>
                                     <h2>{task.title}</h2>
                                     <p>{task.description}</p>
-                                    <p>{formatDateForDisplay(task.dueDate)}</p>
+                                    <p className={taskIsOverdue(task.dueDate) ? styles.overdue : ''}>{formatDateForDisplay(task.dueDate)}</p>
                                 </div>
                                 <div className={styles.buttonsWrapper}>
                                     <button className={styles.editButton} onClick={editTaskHandler.bind(null, task)}>
