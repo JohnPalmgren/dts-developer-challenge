@@ -18,12 +18,21 @@ const AddTaskModal = ({hidden, setHideModal}: { hidden: boolean, setHideModal: (
         const description = formData.get("description") as string || undefined;
         const dueDate = formData.get("dueDate") as string;
 
+        let newTask: TaskInput;
 
-        const newTask: TaskInput = {
-            title,
-            description,
-            completed: false, // new tasks are not completed by default
-            dueDate: new Date(dueDate),
+        if (!description) {
+            newTask = {
+                title,
+                completed: false, // new tasks are not completed by default
+                dueDate: new Date(dueDate),
+            }
+        } else {
+            newTask = {
+                title,
+                description,
+                completed: false, // new tasks are not completed by default
+                dueDate: new Date(dueDate),
+            }
         }
         await addTask(newTask)
         form.reset()
@@ -55,6 +64,7 @@ const AddTaskModal = ({hidden, setHideModal}: { hidden: boolean, setHideModal: (
                     <div className={styles.formItem}>
                         <label htmlFor="dueDate">Due Date</label>
                         <input
+                            defaultValue={new Date().toISOString().split("T")[0]}
                             type="date"
                             id="dueDate"
                             name="dueDate"

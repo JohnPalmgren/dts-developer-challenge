@@ -5,6 +5,7 @@ import {
     convertBinToBool,
     convertTaskToAppFormat,
     convertTaskToDBFormat,
+    taskIsOverdue,
 } from './utils';
 
 describe('formatDateForDisplay', () => {
@@ -105,25 +106,44 @@ describe('convertTaskToAppFormat', () => {
         expect(convertTaskToAppFormat(taskFromDatabase)).toEqual(convertedTask);
     });
 
-    it('should convert the object without a description present', () => {
-        const dateString = '2025-04-14T09:55:42.000Z'
-
+    it('should strip the description field if it is null', () => {
         const taskFromDatabase = {
             id: 1,
             title: 'Test Task',
+            description: null,
             completed: 0,
-            dueDate: dateString,
+            dueDate: '2025-04-14T09:55:42.000Z',
         };
 
-        const convertedTask = {
+        const expectedTask = {
             id: 1,
             title: 'Test Task',
             completed: false,
-            dueDate: new Date(dateString),
+            dueDate: new Date('2025-04-14T09:55:42.000Z'),
         };
 
-        expect(convertTaskToAppFormat(taskFromDatabase)).toEqual(convertedTask);
-    })
+        expect(convertTaskToAppFormat(taskFromDatabase)).toEqual(expectedTask);
+    });
+
+    it('should not strip the description field if it is not null', () => {
+        const taskFromDatabase = {
+            id: 1,
+            title: 'Test Task',
+            description: 'This is a test task.',
+            completed: 0,
+            dueDate: '2025-04-14T09:55:42.000Z',
+        };
+
+        const expectedTask = {
+            id: 1,
+            title: 'Test Task',
+            description: 'This is a test task.',
+            completed: false,
+            dueDate: new Date('2025-04-14T09:55:42.000Z'),
+        };
+
+        expect(convertTaskToAppFormat(taskFromDatabase)).toEqual(expectedTask);
+    });
 })
 
 describe('convertTaskToDBFormat', () => {
@@ -166,10 +186,73 @@ describe('convertTaskToDBFormat', () => {
             id: 1,
             title: 'Test Task',
             completed: 0,
+            description: null,
             dueDate: dateString,
         };
 
         expect(convertTaskToDBFormat(taskFromApp)).toEqual(convertedTask);
     })
+});
+
+describe('taskIsOverdue', () => {
+
+    const MOCK_TODAY_DATE = new Date('2025-04-23T10:00:00.000Z');
+
+    beforeAll(() => {
+        jest.useFakeTimers();
+        jest.setSystemTime(MOCK_TODAY_DATE);
+    });
+
+    afterAll(() => {
+        jest.useRealTimers();
+    });
+
+    test('should return true for a date in the past (yesterday)', () => {
+        const yesterday = new Date(MOCK_TODAY_DATE);
+        yesterday.setDate(MOCK_TODAY_DATE.getDate() - 1); // Set to April 22, 2025
+        expect(taskIsOverdue(yesterday)).toBe(true);
+    });
+
+    test('should return true for a date far in the past', () => {
+        const lastYear = new Date(MOCK_TODAY_DATE);
+        lastYear.setFullYear(MOCK_TODAY_DATE.getFullYear() - 1); // Set to April 23, 2024
+        expect(taskIsOverdue(lastYear)).toBe(true);
+    });
+
+    test('should return false for a date that is today (same day, different time)', () => {
+        // April 23, 2025, 08:00 AM (earlier than mock time)
+        const todayEarly = new Date('2025-04-23T08:00:00.000Z');
+        expect(taskIsOverdue(todayEarly)).toBe(false);
+
+        // April 23, 2025, 14:00 PM (later than mock time)
+        const todayLate = new Date('2025-04-23T14:00:00.000Z');
+        expect(taskIsOverdue(todayLate)).toBe(false);
+    });
+
+    test('should return false for a date exactly at midnight today', () => {
+        // April 23, 2025, 00:00:00.000
+        const midnightToday = new Date('2025-04-23T00:00:00.000Z');
+        expect(taskIsOverdue(midnightToday)).toBe(false);
+    });
+
+
+    test('should return false for a date in the future (tomorrow)', () => {
+        const tomorrow = new Date(MOCK_TODAY_DATE);
+        tomorrow.setDate(MOCK_TODAY_DATE.getDate() + 1); // Set to April 24, 2025
+        expect(taskIsOverdue(tomorrow)).toBe(false);
+    });
+
+    test('should return false for a date far in the future', () => {
+        const nextYear = new Date(MOCK_TODAY_DATE);
+        nextYear.setFullYear(MOCK_TODAY_DATE.getFullYear() + 1); // Set to April 23, 2026
+        expect(taskIsOverdue(nextYear)).toBe(false);
+    });
+
+    test('should return false for a date exactly at midnight tomorrow', () => {
+        // April 24, 2025, 00:00:00.000
+        const midnightTomorrow = new Date('2025-04-24T00:00:00.000Z');
+        expect(taskIsOverdue(midnightTomorrow)).toBe(false);
+    });
+
 });
 

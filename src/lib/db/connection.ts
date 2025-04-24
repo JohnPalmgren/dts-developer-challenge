@@ -26,7 +26,8 @@ const db = new sqlite3.Database(fullDBPath, (err) => {
                     title TEXT NOT NULL,
                     description TEXT,
                     completed INTEGER NOT NULL,
-                    dueDate TEXT
+                    dueDate TEXT,
+                    deleted INTEGER NOT NULL DEFAULT 0
                 )`,
                 (err) => {
                     if (err) {

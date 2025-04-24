@@ -83,16 +83,33 @@ const convertBinToBool = (bin: number): boolean => {
  * This function transforms a task object by:
  * - Converting `completed` from a binary value to a boolean.
  * - Converting `dueDate` from an ISO date string to a JavaScript Date object.
+ * - Strip description field from the object if it's value is null.
  *
  * @param {DatabaseFormattedTask} task - The task object using formats for the database.
  * @returns {Task} The task object with formatting used outside the database.
  */
 const convertTaskToAppFormat = (task: DatabaseFormattedTask ): Task => {
-    return {
-        ...task,
-        completed: convertBinToBool(task.completed),
-        dueDate: new Date(task.dueDate)
+
+    let appTask: Task
+
+    if (!task.description) {
+        // Strip description field if it's value is null
+        appTask = {
+            id: task.id,
+            title: task.title,
+            completed: convertBinToBool(task.completed),
+            dueDate: new Date(task.dueDate)
+        }
+    } else {
+        appTask = {
+            ...task,
+            description: task.description ?? undefined,
+            completed: convertBinToBool(task.completed),
+            dueDate: new Date(task.dueDate)
+        }
     }
+
+    return appTask
 }
 
 /**
@@ -120,8 +137,24 @@ function convertTaskToDBFormat(task: Task | TaskInput): DatabaseFormattedTask | 
     return {
         ...task,
         completed: convertBoolToBin(task.completed),
+        description: task.description ?? null,
         dueDate: task.dueDate.toISOString()
     };
+}
+
+/**
+ * Checks if a task is overdue. A task is overdue if its due date is before the current day.
+ *
+ * @param {Date} dueDate - The due date of the task.
+ * @returns {boolean} Returns true if the task is overdue, otherwise false.
+ */
+const taskIsOverdue = (dueDate: Date): boolean => {
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const effectiveDueDate = new Date(dueDate);
+    effectiveDueDate.setHours(0, 0, 0, 0);
+    return effectiveDueDate < today;
 }
 
 export {
@@ -131,4 +164,5 @@ export {
     convertBinToBool,
     convertTaskToAppFormat,
     convertTaskToDBFormat,
+    taskIsOverdue
 }
