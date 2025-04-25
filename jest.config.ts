@@ -3,6 +3,10 @@ module.exports = {
     testEnvironment: 'node',
     coveragePathIgnorePatterns: ['/node_modules/'],
     coverageReporters: ['text', 'lcov', 'clover'],
+    moduleNameMapper: {
+        '^@/(.*)$': '<rootDir>/src/$1',
+    },
+    moduleDirectories: ['node_modules', '<rootDir>/src'],
     testMatch: [
         '**/__tests__/**/*.js',
         '**/__tests__/**/*.ts',
