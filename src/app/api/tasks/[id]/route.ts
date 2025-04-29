@@ -9,6 +9,9 @@ import {
 
 const GET = async (request: NextRequest, { params }: RouteParams) => {
     const id = parseInt((await params).id)
+    if (isNaN(id)) {
+        return NextResponse.json({error: "Invalid ID"}, {status: 400, statusText: "Bad Request"});
+    }
     try {
         const task = await selectTaskById(id);
         return NextResponse.json(task, {status: 200, statusText: "OK"});
