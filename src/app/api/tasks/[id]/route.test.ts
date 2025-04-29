@@ -107,7 +107,7 @@ describe("PUT function", () => {
         expect(json).toHaveProperty("details");
     });
 
-    it("should return status 400 with validation errors for incorrect  value type", async () => {
+    it("should return status 400 with validation errors for incorrect completed argument", async () => {
         const invalidTask = { id: 1, title: "Updated task", completed: "invalid value", dueDate: new Date()};
         mockRequest.json = jest.fn().mockResolvedValue(invalidTask);
 
@@ -120,7 +120,7 @@ describe("PUT function", () => {
         expect(json).toHaveProperty("details");
     });
 
-    it("should return status 400 with validation errors for incorrect  value type", async () => {
+    it("should return status 400 with validation errors for incorrect  date argument", async () => {
         const invalidTask = { id: 1, title: "Updated task", completed: true, dueDate: "invalid date"};
         mockRequest.json = jest.fn().mockResolvedValue(invalidTask);
 
