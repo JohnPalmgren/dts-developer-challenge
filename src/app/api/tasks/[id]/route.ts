@@ -29,6 +29,9 @@ const PUT = async (request: NextRequest, { params }: RouteParams) => {
     // Updating id should be disallowed on the database level
     try {
         const id = parseInt((await params).id)
+        if (isNaN(id)) {
+            return NextResponse.json({error: "Invalid ID"}, {status: 400, statusText: "Bad Request"});
+        }
         const updatedTask: Task = await request.json();
         const validationResult = TaskSchema.safeParse(updatedTask);
         if (!validationResult.success) {
@@ -47,6 +50,9 @@ const PUT = async (request: NextRequest, { params }: RouteParams) => {
 
 const DELETE = async (request: NextRequest, { params }: RouteParams) => {
     const id = parseInt((await params).id)
+    if (isNaN(id)) {
+        return NextResponse.json({error: "Invalid ID"}, {status: 400, statusText: "Bad Request"});
+    }
     try {
         const deletedTask = await deleteTask(id);
         return NextResponse.json(deletedTask, {status: 200, statusText: "OK"});
