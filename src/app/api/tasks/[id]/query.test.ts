@@ -1,11 +1,18 @@
-import { selectTaskById } from './query';
+import {
+    selectTaskById,
+    updateTask,
+} from './query';
 import db from '@/lib/db/connection';
-import { convertTaskToAppFormat } from '@/lib/utils';
+import {
+    convertTaskToAppFormat,
+    convertTaskToDBFormat
+} from '@/lib/utils';
 import { DatabaseFormattedTask, Task } from '@/lib/types';
 
 
 jest.mock('@/lib/utils', () => ({
     convertTaskToAppFormat: jest.fn(),
+    convertTaskToDBFormat: jest.fn(),
 }));
 
 jest.mock('@/lib/db/connection', () => ({
@@ -88,5 +95,95 @@ describe('selectTaskById', () => {
             [1],
             expect.any(Function)
         );
+    });
+});
+
+describe('updateTask', () => {
+    const mockDbGet = db.get as jest.Mock;
+    const mockConvertTaskToDBFormat = convertTaskToDBFormat as jest.Mock;
+    const mockConvertTaskToAppFormat = convertTaskToAppFormat as jest.Mock;
+
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    it('should resolve with the updated task in app format when the update is successful', async () => {
+        const testDate = new Date('2023-10-01');
+
+        const mockTask: Task = {
+            id: 1,
+            title: 'Updated Task',
+            description: 'Updated Description',
+            completed: true,
+            dueDate: testDate,
+        };
+
+        const mockDbFormattedTask: DatabaseFormattedTask = {
+            id: 1,
+            title: 'Updated Task',
+            description: 'Updated Description',
+            completed: 1,
+            dueDate: testDate.toISOString(),
+        };
+
+        mockConvertTaskToDBFormat.mockReturnValue(mockDbFormattedTask);
+        mockDbGet.mockImplementation((sql, params, callback) => {
+            callback(null, mockDbFormattedTask);
+        });
+        mockConvertTaskToAppFormat.mockReturnValue(mockTask);
+
+        const result = await updateTask(1, mockTask);
+
+        expect(mockConvertTaskToDBFormat).toHaveBeenCalledWith(mockTask);
+        expect(mockDbGet).toHaveBeenCalledWith(
+            expect.any(String),
+            [
+                mockDbFormattedTask.title,
+                mockDbFormattedTask.description,
+                mockDbFormattedTask.completed,
+                mockDbFormattedTask.dueDate,
+                1,
+            ],
+            expect.any(Function)
+        );
+        expect(mockConvertTaskToAppFormat).toHaveBeenCalledWith(mockDbFormattedTask);
+        expect(result).toEqual(mockTask);
+    });
+
+    it('should reject with an error when the task is not found', async () => {
+        const mockTask: Task = {
+            id: 1,
+            title: 'Updated Task',
+            description: 'Updated Description',
+            completed: true,
+            dueDate: new Date('2023-10-01'),
+        };
+
+        mockConvertTaskToDBFormat.mockReturnValue({});
+        mockDbGet.mockImplementation((sql, params, callback) => {
+            callback(null, undefined);
+        });
+
+        await expect(updateTask(1, mockTask)).rejects.toThrow('Task with id 1 not found.');
+        expect(mockDbGet).toHaveBeenCalledWith(expect.any(String), expect.any(Array), expect.any(Function));
+    });
+
+    it('should reject with an error when the database query fails', async () => {
+        const mockTask: Task = {
+            id: 1,
+            title: 'Updated Task',
+            description: 'Updated Description',
+            completed: true,
+            dueDate: new Date('2023-10-01'),
+        };
+
+        const mockError = new Error('Database error');
+        mockConvertTaskToDBFormat.mockReturnValue({});
+        mockDbGet.mockImplementation((sql, params, callback) => {
+            callback(mockError, undefined);
+        });
+
+        await expect(updateTask(1, mockTask)).rejects.toThrow('Database error');
+        expect(mockDbGet).toHaveBeenCalledWith(expect.any(String), expect.any(Array), expect.any(Function));
     });
 });
