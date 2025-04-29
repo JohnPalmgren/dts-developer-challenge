@@ -68,8 +68,34 @@ describe('POST function', () => {
     });
 
 
-    it('should return a 400 response with validation errors for invalid input', async () => {
+    it('should return a 400 response with validation errors for invalid title', async () => {
         const invalidTask = { title: '', completed: false };
+        const mockRequest = {
+            json: jest.fn().mockResolvedValue(invalidTask),
+        } as unknown as NextRequest;
+
+        const response = await POST(mockRequest);
+        const json = await response.json();
+
+        expect(response.status).toBe(400);
+        expect(json).toHaveProperty('error', 'Invalid input');
+    });
+
+    it('should return a 400 response with validation errors for invalid completed argument', async () => {
+        const invalidTask = { title: 'Task 1', completed: "false" };
+        const mockRequest = {
+            json: jest.fn().mockResolvedValue(invalidTask),
+        } as unknown as NextRequest;
+
+        const response = await POST(mockRequest);
+        const json = await response.json();
+
+        expect(response.status).toBe(400);
+        expect(json).toHaveProperty('error', 'Invalid input');
+    });
+
+    it('should return a 400 response with validation errors for invalid dueDate argument', async () => {
+        const invalidTask = { title: 'Task 1', completed: false, dueDate: "invalid date" };
         const mockRequest = {
             json: jest.fn().mockResolvedValue(invalidTask),
         } as unknown as NextRequest;
