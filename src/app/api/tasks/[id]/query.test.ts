@@ -1,6 +1,7 @@
 import {
     selectTaskById,
     updateTask,
+    deleteTask,
 } from './query';
 import db from '@/lib/db/connection';
 import {
@@ -185,5 +186,76 @@ describe('updateTask', () => {
 
         await expect(updateTask(1, mockTask)).rejects.toThrow('Database error');
         expect(mockDbGet).toHaveBeenCalledWith(expect.any(String), expect.any(Array), expect.any(Function));
+    });
+});
+
+describe('deleteTask', () => {
+    const mockDbGet = db.get as jest.Mock;
+    const mockConvertTaskToAppFormat = convertTaskToAppFormat as jest.Mock;
+
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    it('should resolve with the deleted task in app format when the task is successfully deleted', async () => {
+        const testDate = new Date('2023-10-01');
+
+        const mockRow: DatabaseFormattedTask = {
+            id: 1,
+            title: 'Deleted Task',
+            description: 'Deleted Description',
+            completed: 0,
+            dueDate: testDate.toISOString(),
+        };
+
+        const mockTask: Task = {
+            id: 1,
+            title: 'Deleted Task',
+            description: 'Deleted Description',
+            completed: false,
+            dueDate: testDate,
+        };
+
+        mockDbGet.mockImplementation((sql, params, callback) => {
+            callback(null, mockRow);
+        });
+        mockConvertTaskToAppFormat.mockReturnValue(mockTask);
+
+        const result = await deleteTask(1);
+
+        expect(mockDbGet).toHaveBeenCalledWith(
+            expect.any(String),
+            [1],
+            expect.any(Function)
+        );
+        expect(mockConvertTaskToAppFormat).toHaveBeenCalledWith(mockRow);
+        expect(result).toEqual(mockTask);
+    });
+
+    it('should reject with an error when the task is not found', async () => {
+        mockDbGet.mockImplementation((sql, params, callback) => {
+            callback(null, undefined);
+        });
+
+        await expect(deleteTask(1)).rejects.toThrow('Task with id 1 not found.');
+        expect(mockDbGet).toHaveBeenCalledWith(
+            expect.any(String),
+            [1],
+            expect.any(Function)
+        );
+    });
+
+    it('should reject with an error when the database query fails', async () => {
+        const mockError = new Error('Database error');
+        mockDbGet.mockImplementation((sql, params, callback) => {
+            callback(mockError, undefined);
+        });
+
+        await expect(deleteTask(1)).rejects.toThrow('Database error');
+        expect(mockDbGet).toHaveBeenCalledWith(
+            expect.any(String),
+            [1],
+            expect.any(Function)
+        );
     });
 });
