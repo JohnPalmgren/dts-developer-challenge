@@ -5,8 +5,6 @@ import ModalLayout from "@/lib/components/modal-layout/ModelLayout";
 import {useTaskContext} from "@/lib/context/TaskContext";
 import {formatDateToYYYYMMDD} from "@/lib/utils";
 
-// TODO add validation
-
 const EditTaskModal = ({task, hidden, setHideModal}: {task: Task, hidden: boolean, setHideModal: (hidden: boolean) => void}) => {
 
     const { updateTask } = useTaskContext();

@@ -25,8 +25,6 @@ const GET = async (request: NextRequest, { params }: RouteParams) => {
 }
 
 const PUT = async (request: NextRequest, { params }: RouteParams) => {
-    // TODO check task id matches params
-    // Updating id should be disallowed on the database level
     try {
         const id = parseInt((await params).id)
         if (isNaN(id)) {
